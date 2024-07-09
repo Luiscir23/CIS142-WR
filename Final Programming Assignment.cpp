@@ -5,7 +5,7 @@
 
 // Final Programming Assignment.cpp
 
-/* Shakey’s garden can contain other objects which may be movable or immovable based upon its
+/* Shakeyâ€™s garden can contain other objects which may be movable or immovable based upon its
 physical nature; e.g Flowers. Flowers can be stepped on and destroyed. Trees are immovable and
 cannot be destroyed */
 
@@ -54,3 +54,105 @@ int main() {
     shakey.printGarden(garden, rows, columns);
     return 0;
 }
+
+
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class ShakeyRobot {
+private:
+    int position;
+    vector<std::string> inventory;
+
+public:
+    ShakeyRobot() : position(0) {}
+
+    void moveLeft() {
+        position--;
+        cout << "Moved left to position " << position << endl;
+    }
+
+    void moveRight() {
+        position++;
+        cout << "Moved right to position " << position << endl;
+    }
+
+    void pickUpItem(const string& item) {
+        inventory.push_back(item);
+        cout << "Picked up " << item << endl;
+    }
+
+    void showInventory() const {
+        cout << "Inventory: ";
+        for (const auto& item : inventory) {
+            cout << item << " ";
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    ShakeyRobot shakey;
+    char choice;
+    string item;
+
+    do {
+        cout << "Options:\n";
+        cout << "L - Move Left\n";
+        cout << "R - Move Right\n";
+        cout << "P - Pick Up Item\n";
+        cout << "I - Show Inventory\n";
+        cout << "Q - Quit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 'L':
+        case 'l':
+            shakey.moveLeft();
+            break;
+        case 'R':
+        case 'r':
+            shakey.moveRight();
+            break;
+        case 'P':
+        case 'p':
+            cout << "Enter item to pick up: ";
+            cin >> item;
+            shakey.pickUpItem(item);
+            break;
+        case 'I':
+        case 'i':
+            shakey.showInventory();
+            break;
+        case 'Q':
+        case 'q':
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice, please try again.\n";
+            break;
+        }
+    } while (choice != 'Q' && choice != 'q');
+
+    return 0;
+}
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
