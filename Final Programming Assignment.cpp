@@ -16,51 +16,71 @@ cannot be destroyed */
 using namespace std;
 
 // only works on windows terminal
-HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // control colors.
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 class Garden {
 public:
     // set the location of the robot.
-    void location(std::vector<vector<string>>& shakey, int& x, int& y) {
+    void location(vector<vector<string>>& shakey, int& x, int& y) {
         shakey[y][x] = "S ";
     }
 
-    // run if user rotates shakey left by 90 degrees.
+    // clear the previous location of the robot.
+    void clearLocation(vector<vector<string>>& shakey, int x, int y) {
+        shakey[y][x] = "* ";
+    }
+
+    // run if user rotates Shakey left by 90 degrees.
     void rotateRight(char& direction) {
-        if (direction == 'N') { 
-            direction = 'E'; }
-        else if (direction == 'E') { 
-            direction = 'S'; }
-        else if (direction == 'S') { 
-            direction = 'W'; }
-        else if (direction == 'W') { 
-            direction = 'N'; }
+        if (direction == 'N') {
+            direction = 'E';
+        }
+        else if (direction == 'E') {
+            direction = 'S';
+        }
+        else if (direction == 'S') {
+            direction = 'W';
+        }
+        else if (direction == 'W') {
+            direction = 'N';
+        }
     }
 
-    // run if user rotates shakey right by 90 degrees.
+    // run if user rotates Shakey right by 90 degrees.
     void rotateLeft(char& direction) {
-        if (direction == 'N') { 
-            direction = 'W'; }
-        else if (direction == 'E') { 
-            direction = 'N'; }
-        else if (direction == 'S') { 
-            direction = 'E'; }
-        else if (direction == 'W') { 
-            direction = 'S'; }
+        if (direction == 'N') {
+            direction = 'W';
+        }
+        else if (direction == 'E') {
+            direction = 'N';
+        }
+        else if (direction == 'S') {
+            direction = 'E';
+        }
+        else if (direction == 'W') {
+            direction = 'S';
+        }
     }
 
-    // control for shakey the robot to step forward based on which way they are facing.
+    // control for Shakey the robot to step forward based on which way they are facing.
     void step(vector<vector<string>>& garden, char direction, int& x, int& y, int rows, int columns) {
-        if (direction == 'N') { if (y > 1) y--; }
-        else if (direction == 'E') { 
-            if (x + 1 < columns - 1) x++; }
-        else if (direction == 'S') { 
-            if (y + 1 < rows - 1) y++; }
-        else if (direction == 'W') { 
-            if (x > 1) x--; }
+        clearLocation(garden, x, y);
+        if (direction == 'N') {
+            if (y > 1) y--;
+        }
+        else if (direction == 'E') {
+            if (x + 1 < columns - 1) x++;
+        }
+        else if (direction == 'S') {
+            if (y + 1 < rows - 1) y++;
+        }
+        else if (direction == 'W') {
+            if (x > 1) x--;
+        }
+        location(garden, x, y);
     }
 
-    vector<std::string> inventory; // stores inventory items for shakey.
+    vector<string> inventory; // stores inventory items for Shakey.
     void pickUpItem(const string& item) {
         inventory.push_back(item);
         cout << "Picked up " << item << endl;
@@ -87,7 +107,7 @@ int main() {
 
 void startGame() {
     // shakeys coordinates
-    int x = 1; int y = 1;
+    int x = 1, y = 1;
 
     // control shakey facing direction.
     char direction = 'E';
@@ -96,12 +116,13 @@ void startGame() {
     int rows;
     cout << "Enter rows: ";
     cin >> rows;
-    rows = rows + 2;
+    rows += 2;
     system("cls");
+
     int columns;
     cout << "Enter columns: ";
     cin >> columns;
-    columns = columns + 2;
+    columns += 2;
     system("cls");
 
     // create a 2D array named garden, with the user defined size.
@@ -118,13 +139,13 @@ void startGame() {
 
     char userInput; // store users options to execute commands
     do {
-        printGarden(garden, rows, columns); // flush console and print garden.
+        printGarden(garden, rows, columns);
 
         // options menu.
         SetConsoleTextAttribute(hConsole, 7);
         cout << "Facing: " << direction << endl;
         // show coordinates of the robots location.
-        cout << "Shakey coordinates: " << "(" << x << ", " << y << ")" << endl;
+        cout << "Shakey coordinates: (" << x << ", " << y << ")" << endl;
         cout << "Options:\n";
         cout << "L - Rotate Left\n";
         cout << "R - Rotate Right\n";
@@ -150,9 +171,7 @@ void startGame() {
         case 'S': // have shakey the robot move forward in the direction they are facing.
             SetConsoleTextAttribute(hConsole, 10);
             system("cls");
-            //garden[y][x] = "* ";
             shakey.step(garden, direction, x, y, rows, columns);
-            shakey.location(garden, x, y);
             break;
         case 'P': // pick up the item that shakey is standing on.
             SetConsoleTextAttribute(hConsole, 10);
@@ -185,7 +204,7 @@ void setStartingElements(vector<vector<string>>& shakey, int x, int y) {
     uniform_int_distribution<mt19937::result_type> randX(1, x - 2); // set value.
     uniform_int_distribution<mt19937::result_type> randY(1, y - 2);
     int randomX = randX(rng);
-    int randomY = randX(rng);
+    int randomY = randY(rng);
     // set each element in the 2D array to this element.
     for (int i = 0; i < x; i++) {
         for (int j = 0; j < y; j++) {
@@ -249,7 +268,7 @@ void printGarden(vector<vector<string>>& locGarden, int locRows, int locColumns)
             } // blue color for water
             else {
                 SetConsoleTextAttribute(hConsole, 8);
-            } // green color for garden}
+            }  // green color for garden}
             cout << locGarden[i][j]; // print each element in the predefined garden.
         }
         // print legend on right side of garden map.
